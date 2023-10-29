@@ -104,20 +104,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   IconButton(
                     icon: const Icon(Icons.search),
                     onPressed: () {
-                      if (true) {
-                        const Rect rect = Rect.fromLTWH(0, 0, 200, 100);
-                        
-                        const Text("No se han encontrado resultados");
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Container(
-                              width: rect.width,
-                              height: rect.height,
-                            ),
-                          ),
-                        );
-                      }
-                    },
+  if (true) {
+    const Rect rect = Rect.fromLTWH(0, 0, 200, 100);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("No se han encontrado resultados"), // Agregar el Text aquí
+      ),
+    );
+  }
+}
                   )
                 ],
               ),
