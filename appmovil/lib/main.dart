@@ -59,14 +59,12 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             ListTile(
-              title: const Text('Informes'),
+              title: Text('Informes'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pop(context); // Cierra el Drawer
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => InformesScreen(),
-                  ),
+                  MaterialPageRoute(builder: (context) => InformesScreen()), // Navega a InformesScreen
                 );
               },
             ),
