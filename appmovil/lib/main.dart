@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'Inventario_screen.dart';
-import 'Informes_screen.dart';
+import 'inventario_screen.dart';
+import 'informes_screen.dart';
+import 'login.dart';
+import 'dart:convert';
 
 void main() {
   runApp(MyApp());
@@ -11,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyHomePage(),
+      home: LoginPage(),
     );
   }
 }
@@ -22,7 +24,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  TextEditingController _searchController = TextEditingController();
 
+  List<Widget> _herramientasWidgets = [];
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +51,18 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ListTile(
+              title: const Text('Inicio de sesion'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
               title: const Text('Inventario'),
               onTap: () {
                 Navigator.pop(context);
@@ -61,10 +77,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               title: Text('Informes'),
               onTap: () {
-                Navigator.pop(context); // Cierra el Drawer
+                Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => InformesScreen()), // Navega a InformesScreen
+                  MaterialPageRoute(builder: (context) => InformesScreen()),
                 );
               },
             ),
@@ -90,8 +106,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               child: Row(
                 children: <Widget>[
-                  const Expanded(
+                  Expanded(
                     child: TextField(
+                      controller: _searchController,
                       decoration: InputDecoration(
                         hintText: 'Buscar...',
                         border: InputBorder.none,
@@ -100,20 +117,50 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-  if (true) {
-    const Rect rect = Rect.fromLTWH(0, 0, 200, 100);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("No se han encontrado resultados"), // Agregar el Text aquí
-      ),
-    );
-  }
-}
+                    icon: Icon(Icons.search),
+                    onPressed: () async {
+                      final String searchTerm = _searchController.text;
+
+                      final response = await http.post(
+                        Uri.parse('http://localhost/flutter/buscar_herramienta.php'),
+                        body: {'nombre_herramienta': searchTerm},
+                      );
+
+                      if (response.statusCode == 200) {
+                        final List<dynamic> data = json.decode(response.body);
+                        setState(() {
+                          if (data.isNotEmpty) {
+                            _herramientasWidgets = data.map((herramienta) {
+                              return Column(
+                                children: [
+                                  Text('Herramienta: ${herramienta['herramienta']}'),
+                                  Text('Cantidad: ${herramienta['cantidad']}'),
+                                  Text('Ubicación: ${herramienta['ubicacion']}'),
+                                  Divider(), // Separador visual entre las herramientas
+                                ],
+                              );
+                            }).toList();
+
+                            // Imprime los nombres de las herramientas en la terminal
+                            for (var herramienta in data) {
+                              print('Herramienta: ${herramienta['herramienta']}, Cantidad: ${herramienta['cantidad']}, Ubicación: ${herramienta['ubicacion']}');
+                            }
+                          } else {
+                            _herramientasWidgets = []; // Limpia la lista si no hay resultados
+                          }
+                        });
+                      }else {
+                        throw Exception('Error al obtener los datos de inventario');
+                      }
+                    },
                   )
                 ],
               ),
+            ),
+          ),
+          Expanded(
+            child: ListView(
+              children: _herramientasWidgets,
             ),
           ),
         ],
@@ -121,4 +168,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
