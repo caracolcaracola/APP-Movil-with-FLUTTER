@@ -17,7 +17,8 @@ class _InventarioScreenState extends State<InventarioScreen> {
   }
 
   Future<void> obtenerDatosDeInventario() async {
-    final response = await http.get(Uri.parse('http://localhost/flutter/inventario.php'));
+    final response =
+        await http.get(Uri.parse('http://localhost/flutter/inventario.php'));
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
@@ -31,59 +32,46 @@ class _InventarioScreenState extends State<InventarioScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<DataRow> rows = [];
-
-    for (int i = 0; i < inventario.length; i++) {
-      final item = inventario[i];
-
-      DataRow row = DataRow(
-        cells: <DataCell>[
-          DataCell(Text(item['herramienta'])),
-          DataCell(Text(item['cantidad'].toString())),
-          DataCell(Text(item['ubicacion'])),
-        ],
-      );
-
-      rows.add(row);
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Pantalla de Inventario'),
+        backgroundColor: Color(0xFF393F46),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: DataTable(
-              headingRowColor: MaterialStateColor.resolveWith((states) {
-                return Color(0xFF393F46);
-              }),
-              columns: const <DataColumn>[
-                DataColumn(
-                  label: Text(
-                    'Nombre',
-                    style: TextStyle(color: Colors.white),
-                  ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: inventario.map<Widget>((item) {
+            return Card(
+              margin: EdgeInsets.all(8.0),
+              elevation: 3.0,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Nombre: ${item['herramienta']}',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8.0),
+                    Text(
+                      'Cantidad: ${item['cantidad']}',
+                      style: TextStyle(fontSize: 14.0),
+                    ),
+                    SizedBox(height: 8.0),
+                    Text(
+                      'Ubicación: ${item['ubicacion']}',
+                      style: TextStyle(fontSize: 14.0),
+                    ),
+                  ],
                 ),
-                DataColumn(
-                  label: Text(
-                    'Cantidad',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Ubicación',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
-              rows: rows,
-            ),
-          ),
+              ),
+            );
+          }).toList(),
         ),
       ),
     );

@@ -25,7 +25,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _searchController = TextEditingController();
-
   List<Widget> _herramientasWidgets = [];
 
   @override
@@ -50,19 +49,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
+         
             ListTile(
-              title: const Text('Inicio de sesion'),
+              leading: Icon(Icons.home),
+              title: const Text('Home'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LoginPage(),
+                    builder: (context) => InventarioScreen(),
                   ),
                 );
               },
             ),
             ListTile(
+              leading: Icon(Icons.build),
               title: const Text('Inventario'),
               onTap: () {
                 Navigator.pop(context);
@@ -75,12 +77,27 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.book),
               title: Text('Informes'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => InformesScreen()),
+                );
+              },
+            ),
+             SizedBox(height: 70), // Agregar un Divider entre elementos
+               ListTile(
+              leading: Icon(Icons.person),
+              title: const Text('Cerrar sesion'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ),
                 );
               },
             ),
@@ -131,13 +148,54 @@ class _MyHomePageState extends State<MyHomePage> {
                         setState(() {
                           if (data.isNotEmpty) {
                             _herramientasWidgets = data.map((herramienta) {
-                              return Column(
-                                children: [
-                                  Text('Herramienta: ${herramienta['herramienta']}'),
-                                  Text('Cantidad: ${herramienta['cantidad']}'),
-                                  Text('Ubicación: ${herramienta['ubicacion']}'),
-                                  Divider(), // Separador visual entre las herramientas
-                                ],
+                              return Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 3,
+                                        blurRadius: 7,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ],
+                                  ),
+                                  width: 600,
+                                  padding: const EdgeInsets.all(6.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Herramienta: ${herramienta['herramienta']}',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 6),
+                                      Text(
+                                        'Cantidad: ${herramienta['cantidad']}',
+                                        style: TextStyle(
+                                          color: Color.fromARGB(255, 41, 41, 41),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      SizedBox(height: 6),
+                                      Text(
+                                        'Ubicación: ${herramienta['ubicacion']}',
+                                        style: TextStyle(
+                                          color: Color.fromARGB(255, 51, 51, 51),
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8),
+                                    ],
+                                  ),
+                                ),
                               );
                             }).toList();
 
@@ -149,8 +207,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             _herramientasWidgets = []; // Limpia la lista si no hay resultados
                           }
                         });
-                      }else {
-                        throw Exception('Error al obtener los datos de inventario');
+                      } else {
+                        throw Exception ('Error al obtener los datos de inventario');
                       }
                     },
                   )
