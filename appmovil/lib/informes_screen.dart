@@ -2,7 +2,6 @@ import 'package:appmovil/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'inventario_screen.dart';
-import 'informes_screen.dart';
 import 'login.dart';
 import 'dart:convert';
 
