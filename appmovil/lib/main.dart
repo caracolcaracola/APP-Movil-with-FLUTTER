@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => InventarioScreen(),
+                    builder: (context) => MyHomePage(),
                   ),
                 );
               },
@@ -139,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       final String searchTerm = _searchController.text;
 
                       final response = await http.post(
-                        Uri.parse('http://localhost/flutter/buscar_herramienta.php'),
+                        Uri.parse('http://server_prog2/panolAPP/buscar_herramienta.php'),
                         body: {'nombre_herramienta': searchTerm},
                       );
 

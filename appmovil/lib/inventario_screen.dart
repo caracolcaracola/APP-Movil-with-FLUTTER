@@ -1,5 +1,8 @@
+import 'package:appmovil/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'informes_screen.dart';
+import 'login.dart';
 import 'dart:convert';
 
 class InventarioScreen extends StatefulWidget {
@@ -18,7 +21,7 @@ class _InventarioScreenState extends State<InventarioScreen> {
 
   Future<void> obtenerDatosDeInventario() async {
     final response =
-        await http.get(Uri.parse('http://localhost/flutter/inventario.php'));
+        await http.get(Uri.parse('http://server_prog2/panolAPP/inventario.php'));
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
@@ -36,6 +39,77 @@ class _InventarioScreenState extends State<InventarioScreen> {
       appBar: AppBar(
         title: Text('Pantalla de Inventario'),
         backgroundColor: Color(0xFF393F46),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Menú',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+         
+            ListTile(
+              leading: Icon(Icons.home),
+              title: const Text('Home'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyHomePage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.build),
+              title: const Text('Inventario'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => InventarioScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.book),
+              title: Text('Informes'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => InformesScreen()),
+                );
+              },
+            ),
+             SizedBox(height: 70), // Agregar un Divider entre elementos
+               ListTile(
+              leading: Icon(Icons.person),
+              title: const Text('Cerrar sesion'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,

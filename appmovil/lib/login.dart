@@ -16,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
     String password = _passwordController.text;
 
     final response = await http.post(
-      Uri.parse('http://localhost/flutter/verificar_usuario.php'),
+      Uri.parse('http://server_prog2/panolAPP/verificar_usuario.php'),
       body: {
         'username': username,
         'password': password,

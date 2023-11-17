@@ -27,7 +27,7 @@ class _InformesScreenState extends State<InformesScreen> {
 
   Future<void> obtenerDatosDeInformes() async {
     final response =
-        await http.get(Uri.parse('http://localhost/flutter/informes.php'));
+        await http.get(Uri.parse('http://server_prog2/panolAPP/informes.php'));
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
@@ -128,19 +128,7 @@ class _InformesScreenState extends State<InformesScreen> {
                 ),
               ),
             ),
-             ListTile(
-              leading: Icon(Icons.person),
-              title: const Text('Cerrar sesión'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
-                  ),
-                );
-              },
-            ),
+         
             ListTile(
               leading: Icon(Icons.home),
               title: const Text('Home'),
@@ -172,7 +160,24 @@ class _InformesScreenState extends State<InformesScreen> {
               title: Text('Informes'),
               onTap: () {
                 Navigator.pop(context);
-                // No es necesario hacer nada aquí, ya estás en la pantalla de informes
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => InformesScreen()),
+                );
+              },
+            ),
+             SizedBox(height: 70), // Agregar un Divider entre elementos
+               ListTile(
+              leading: Icon(Icons.person),
+              title: const Text('Cerrar sesion'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ),
+                );
               },
             ),
           ],
